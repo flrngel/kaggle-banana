@@ -1,70 +1,112 @@
-# Getting Started with Create React App
+# Nano Banana Studio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Instruction-driven, layer-based visual editor powered by Gemini 2.5 Flash Image Preview ("Nano Banana"). Edit with words, blend realities, and keep characters consistent across scenes — all in a responsive, non-destructive canvas workflow.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+Nano Banana Studio turns natural language into precise visual edits. It fuses real photos and generated elements with lighting- and shadow-aware blending, supports character/style consistency, and accelerates creative and e‑commerce workflows.
 
-### `npm start`
+What you can do:
+- Conversational edits: “Replace the background with a sunny park and add soft morning light.”
+- Consistent characters: Keep the same mascot/person across multiple shots.
+- Product visualization: Place products into real spaces, match shadows, refine edges.
+- Creative automation: Batch-size variants for channels and campaigns.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Demo
+- Video (≤2 min): https://youtu.be/TtCNOdwGtKU
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Core Features
+- Layer canvas: Drag/scale/rotate, reorder, toggle visibility, history-based non-destructive edits.
+- Localized edits: Apply Gemini-powered changes to selected layers or masked regions only.
+- Photo+gen fusion: Insert generated props that match perspective, lighting, and shadows.
+- Fast UI: Heavy work (background removal, mask refine) offloaded to a Web Worker.
+- Secure API access: Vercel Edge Function proxies Gemini, protects secrets, enforces limits.
 
-### `npm test`
+## Architecture
+- React app (`src/`): Canvas UI, layers, and prompts.
+- Web Worker (`src/worker.js`): Background removal and image-heavy pre/post-processing.
+- Edge Function (`api/gemini.js`): Structured Gemini calls (edit, blend, consistency) and rate-limit guards.
+- Static shell (`public/`): CRA HTML and assets.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Project Structure
+- `src/`: React components (`App.js`, `Canvas.js`, `ObjectLayer.js`, `LayerItem.js`) and tests.
+- `src/worker.js`: Off-main-thread image tasks (background removal, mask refinement).
+- `api/gemini.js`: Vercel Edge Function proxy for Gemini API.
+- `public/`: Static assets and CRA HTML shell.
+- `vercel.json`: Per-function config (limits, regions).
 
-### `npm run build`
+## Prerequisites
+- Node 18+ and Yarn 1.x
+- Vercel CLI (`npm i -g vercel`) for local Edge Functions
+- A Gemini API key (free tier available) stored as an environment variable
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Setup
+1) Install dependencies:
+```
+yarn
+```
+2) Configure environment variables:
+```
+cp .env.example .env
+# Then set GEMINI_API_KEY in .env or your shell
+```
+Required:
+- `GEMINI_API_KEY` – used by `api/gemini.js` (never exposed to the client).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Development
+Run the Edge Function and the React app in parallel. The React app proxies API calls to the Edge server.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Terminal A (Vercel dev on 5001):
+```
+yarn dev:vercel
+```
 
-### `npm run eject`
+Terminal B (CRA on 3000):
+```
+yarn start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Open the app at http://localhost:3000. API calls go to http://localhost:5001 via CRA proxy (see `proxy` in `package.json`).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Testing
+Interactive watch mode:
+```
+yarn test
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Production Build
+Create an optimized build:
+```
+yarn build
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Deployment (Vercel)
+- Ensure `GEMINI_API_KEY` is set in your Vercel Project Environment Variables.
+- Deploy with the Vercel CLI or Git integration. Edge Function lives at `/api/gemini`.
 
-## Learn More
+## Usage Guide (Quick Start)
+1) Upload or drop a base image onto the canvas.
+2) Add object layers (images with optional masks; background removal handled in the worker).
+3) Select a layer or region, then enter a prompt (e.g., “make lighting warm; add soft shadow under the mug”).
+4) Use “Final Blend” to fuse layers with realistic lighting and edges.
+5) Export as PNG/WebP.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Gemini Integration
+The app uses Gemini 2.5 Flash Image Preview (Nano Banana) for localized, instruction-driven editing:
+- Targeted edits: relight, background replace, add/remove objects — constrained to selected layers/masks.
+- Fusion: insert generated props consistent with scene perspective, lighting, and shadows.
+- Consistency: reuse prompt context, seeds, and references to keep characters/styles stable across scenes.
+Edge proxy enforces special-tier limits, runs safety checks, and keeps API keys off the client. Heavy image prep runs in a Web Worker to maintain UI responsiveness.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Limits & Safety
+- Special tier limits: ~20 images/min and ~500 requests/day per project.
+- Costs: Using a paid API key incurs usage charges per your plan.
+- Secrets: Do not place secrets in `REACT_APP_*`; use server-side env vars only.
 
-### Code Splitting
+## Troubleshooting
+- 404 on `/api/gemini`: Ensure `yarn dev:vercel` is running on port 5001.
+- 401/403 from API: Verify `GEMINI_API_KEY` is set in your local `.env` and in Vercel.
+- UI jank on large images: Confirm worker is active (`src/worker.js`) and avoid blocking main thread tasks.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+Proprietary – internal hackathon project. Replace with your preferred license if open-sourcing.
