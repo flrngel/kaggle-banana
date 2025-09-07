@@ -1,4 +1,4 @@
-# Nano Banana Studio (Blueprint-Aligned)
+# Nano Banana Studio
 
 A layer-based visual editor where humans place multiple objects at exact positions; Gemini only finishes the image (blend, lighting, edges). Positioning is deterministic and locked by the editor. The model is used as a “finisher,” not a layout engine — exactly as described in the BLUEPRINT.
 
