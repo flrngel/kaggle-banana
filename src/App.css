@@ -1,40 +1,104 @@
+:root {
+  --bg: #0f1115;
+  --panel: #151922;
+  --panel-2: #1a2030;
+  --text: #e6e8ef;
+  --muted: #9aa4b2;
+  --accent: #6ea8fe;
+  --border: #263042;
+}
+
 .App {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background: var(--bg);
+  color: var(--text);
 }
 
-.toolbar {
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
 }
 
-.toolbar button {
-  margin-right: 10px;
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
+
+.actions { display: flex; gap: 8px; }
+.btn {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+.btn.primary { background: var(--accent); color: #0a0c10; border-color: var(--accent); }
 
 .main-content {
-  display: flex;
-  flex: 1;
+  display: grid;
+  grid-template-columns: 320px 1fr 320px;
+  gap: 12px;
+  padding: 12px;
 }
 
-.layer-list {
-  width: 200px;
-  border-right: 1px solid #ccc;
-  padding: 10px;
+.sidebar, .inspector { display: flex; flex-direction: column; gap: 12px; }
+.panel {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
 }
+.panel h3 { margin: 0 0 10px; font-size: 14px; color: var(--muted); }
+
+.dropzone {
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  height: 72px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.thumb { width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-top: 8px; }
+
+.layer-list { display: flex; flex-direction: column; gap: 8px; max-height: 45vh; overflow: auto; }
+.layer-item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 8px;
+  align-items: center;
+  background: #0f141e;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px;
+}
+.layer-thumb { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; }
+.layer-meta { display: flex; flex-direction: column; gap: 6px; }
+.layer-title { font-size: 12px; color: var(--text); }
+.layer-controls { display: flex; align-items: center; gap: 8px; }
+.toggle span { margin-left: 6px; color: var(--muted); font-size: 12px; }
+.icon-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; cursor: pointer; }
 
 .canvas-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #eee;
+  display: grid;
+  place-items: center;
+  background: #0b0e14;
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }
 
-.properties-panel {
-  width: 200px;
-  border-left: 1px solid #ccc;
-  padding: 10px;
-}
+.final { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+.placeholder { color: var(--muted); font-size: 14px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.field label { font-size: 12px; color: var(--muted); }
+.textarea { width: 100%; resize: vertical; background: #0f141e; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px; }
