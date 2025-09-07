@@ -3,13 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@imgly/background-removal": "^1.7.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "@vercel/edge": "^1.2.2",
+    "konva": "^9.3.22",
     "react": "^19.1.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.1.1",
+    "react-konva": "^19.0.7",
     "react-scripts": "5.0.1",
+    "use-image": "^1.1.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
